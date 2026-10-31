@@ -1,5 +1,5 @@
 #!/bin/bash
-# Instala el tema "Savitar" en la Terminal de Mac (solo aspecto, sin atajos)
+# Instala la configuración "Farid" en la Terminal de Mac (solo aspecto, sin atajos)
 # y las notificaciones de Claude Code.
 # Se puede ejecutar varias veces: respalda lo existente y no duplica nada.
 set -euo pipefail
@@ -48,17 +48,17 @@ zsh -n ~/.zshrc || fail "~/.zshrc tiene errores de sintaxis"
 ok "~/.zshrc y ~/.p10k.zsh instalados"
 
 # 4. Perfil de la Terminal
-info "Creando perfil 'Savitar' de la Terminal..."
-PROFILE="$(mktemp -d)/Savitar.terminal"
+info "Creando perfil 'Farid' de la Terminal..."
+PROFILE="$(mktemp -d)/Farid.terminal"
 OUT="$PROFILE" osascript -l JavaScript "$REPO/terminal/make-profile.js" >/dev/null
 plutil -lint "$PROFILE" >/dev/null || fail "El perfil generado no es válido"
 open "$PROFILE"      # importa el perfil (abre una ventana de la Terminal)
 sleep 2
 osascript -e 'tell application "Terminal"
-  set default settings to settings set "Savitar"
-  set startup settings to settings set "Savitar"
+  set default settings to settings set "Farid"
+  set startup settings to settings set "Farid"
 end tell'
-ok "Perfil 'Savitar' importado y marcado como predeterminado"
+ok "Perfil 'Farid' importado y marcado como predeterminado"
 
 # 5. Terminal: recuperar ventanas y pestañas al cerrar con Cmd+Q y volver a abrir
 defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows -bool true

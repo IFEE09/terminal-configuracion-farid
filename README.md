@@ -1,6 +1,6 @@
-# mac-terminal-setup
+# Terminal · Configuración Farid
 
-Tema para la **Terminal nativa de macOS**, inspirado en el de S4vitar: prompt Powerlevel10k, fuente Hack Nerd Font, fondo transparente con desenfoque, colores vivos y neofetch. Además configura la Terminal para recuperar sus ventanas y agrega notificaciones de Claude Code (ver [Extras](#extras-terminal-y-claude-code)).
+Configuración de Farid para la **Terminal nativa de macOS**: prompt Powerlevel10k, fuente Hack Nerd Font, fondo transparente con desenfoque, colores vivos y neofetch. Además configura la Terminal para recuperar sus ventanas y agrega notificaciones de Claude Code (ver [Extras](#extras-terminal-y-claude-code)).
 
 **Regla principal para la Terminal: solo aspecto.** No agrega atajos de teclado, no reemplaza comandos (`ls` y `cat` siguen siendo los de Mac) y no cambia el comportamiento de ninguna tecla. Solo afecta a la Terminal de Mac: VS Code, la app de Claude y cualquier otra terminal quedan igual.
 
@@ -11,17 +11,17 @@ Además instala las **notificaciones de Claude Code**: un aviso de macOS cada ve
 Pégalo en un asistente de IA que pueda usar tu terminal, de preferencia Claude Code:
 
 ```text
-Instala la configuración de terminal del repo público de GitHub IFEE09/mac-terminal-setup.
+Instala la configuración de terminal del repo público de GitHub IFEE09/terminal-configuracion-farid.
 
-1. Clónalo con `git clone https://github.com/IFEE09/mac-terminal-setup.git ~/mac-terminal-setup` (si ya existe, haz `git -C ~/mac-terminal-setup pull`).
+1. Clónalo con `git clone https://github.com/IFEE09/terminal-configuracion-farid.git ~/terminal-configuracion-farid` (si ya existe, haz `git -C ~/terminal-configuracion-farid pull`).
 2. Lee el README.md completo para entender qué hace y qué NO debe hacer. En la Terminal: solo aspecto, sin atajos, sin reemplazar ls/cat, sin Kitty. Las notificaciones de Claude Code (hook Stop en ~/.claude/settings.json) sí van incluidas a propósito.
 3. Verifica que Homebrew esté instalado. Si no, detente y dime qué comando correr: pide contraseña y lo tengo que hacer yo.
-4. Ejecuta `~/mac-terminal-setup/install.sh`.
+4. Ejecuta `~/terminal-configuracion-farid/install.sh`.
 5. Verifica lo que dice la sección "Verificación" del README y dime el resultado de cada punto (incluida la notificación de prueba).
 6. Recuérdame los pasos manuales de notificaciones (permitir terminal-notifier y ponerlo en Persistente), abrir una ventana nueva de la Terminal y, si uso Claude Code, reiniciarlo para que tome el hook de notificaciones.
 ```
 
-A mano: `git clone https://github.com/IFEE09/mac-terminal-setup.git ~/mac-terminal-setup && ~/mac-terminal-setup/install.sh` (requiere Homebrew).
+A mano: `git clone https://github.com/IFEE09/terminal-configuracion-farid.git ~/terminal-configuracion-farid && ~/terminal-configuracion-farid/install.sh` (requiere Homebrew).
 
 ## Opcional: Claude Usage
 
@@ -41,7 +41,7 @@ git clone https://github.com/IFEE09/claude-usage.git ~/claude-usage
 | Powerlevel10k | Prompt de colores con carpeta, git y hora | `brew install powerlevel10k` |
 | zsh-autosuggestions | Sugerencia en gris según el historial | `brew install zsh-autosuggestions` |
 | zsh-syntax-highlighting | Comando en verde si existe, rojo si no | `brew install zsh-syntax-highlighting` |
-| Perfil "Savitar" | Fuente, transparencia, colores y cursor de la Terminal | `terminal/make-profile.js` |
+| Perfil "Farid" | Fuente, transparencia, colores y cursor de la Terminal | `terminal/make-profile.js` |
 | Recuperar ventanas | La Terminal reabre sus ventanas y pestañas tras ⌘Q | `defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows` |
 | neofetch | Logo de Apple y datos de la Mac al escribir `neofetch` | Descarga de la versión 7.1.0 a `~/.local/bin` (Homebrew ya no lo tiene) |
 | terminal-notifier + jq | Notificaciones de Claude Code al terminar | `brew install terminal-notifier jq` |
@@ -66,7 +66,7 @@ claude/CLAUDE.md           Preferencias globales de Claude (español, breve) →
 2. Agrega `brew shellenv` a `~/.zprofile` si no está.
 3. Instala la fuente, Powerlevel10k y los dos plugins.
 4. Respalda `~/.zshrc` y `~/.p10k.zsh` si existen y son distintos (`.backup-FECHA`), y copia los del repo.
-5. Genera `Savitar.terminal` con `make-profile.js`, lo importa (se abre una ventana de la Terminal) y lo deja como perfil predeterminado y de inicio.
+5. Genera `Farid.terminal` con `make-profile.js`, lo importa (se abre una ventana de la Terminal) y lo deja como perfil predeterminado y de inicio.
 6. Activa que la Terminal recupere sus ventanas al reabrirse.
 7. Descarga neofetch 7.1.0 desde su repo en GitHub, comprueba su huella SHA-256 y lo deja en `~/.local/bin`. Homebrew lo retiró porque el proyecto ya no se mantiene; esa versión es la última y funciona en macOS.
 8. Instala `terminal-notifier` y `jq`, copia `notify.sh` y mezcla `claude/settings.json` en `~/.claude/settings.json` (con respaldo `.backup-FECHA`; conserva tus otros ajustes y hooks, reemplaza hooks anteriores de `notify.sh` y no duplica nada si se corre otra vez). Al final pide permiso de notificaciones.
@@ -76,7 +76,7 @@ claude/CLAUDE.md           Preferencias globales de Claude (español, breve) →
 | Ajuste | Valor |
 |---|---|
 | Fuente | Hack Nerd Font Mono, 14 pt (`HackNFM-Regular`) |
-| Fondo | `#0f111a` al 78 % de opacidad, desenfoque 0.6 |
+| Fondo | `#0f111a` al 70 % de opacidad, desenfoque 0.6 |
 | Texto | `#e6edff`; negrita `#ffffff` con colores brillantes |
 | Cursor | Barra rosa `#ff79c6` |
 | Selección | `#3d59a1` |
@@ -95,7 +95,7 @@ Paleta ANSI (normal / brillante):
 | Cian | `#00e5ff` | `#6cf6ff` |
 | Blanco | `#c3cee3` | `#ffffff` |
 
-Para cambiar colores o transparencia, edita `terminal/make-profile.js` y vuelve a correr `install.sh`, o ajústalo a mano en **Terminal → Ajustes → Perfiles → Savitar**.
+Para cambiar colores o transparencia, edita `terminal/make-profile.js` y vuelve a correr `install.sh`, o ajústalo a mano en **Terminal → Ajustes → Perfiles → Farid**.
 
 ## Cómo funciona el `.zshrc`
 
@@ -146,7 +146,7 @@ Se usa `terminal-notifier` y no `osascript` porque las notificaciones de `osascr
 
 Este setup es el resultado de varias iteraciones. Queda documentado para no repetir errores:
 
-1. **Kitty como terminal**: funcionaba bien, pero se descartó para usar la Terminal nativa de Mac. Su paleta y transparencia se pasaron al perfil "Savitar".
+1. **Kitty como terminal**: funcionaba bien, pero se descartó para usar la Terminal nativa de Mac. Su paleta y transparencia se pasaron al perfil "Farid".
 2. **Atajos de teclado** (alias `ll`/`la`/`l`, función `mkt`, plugin sudo con `Esc Esc`, fzf con `Ctrl+R`/`Ctrl+T`, paneles con `Cmd+D`, `bindkey` de Option y flechas): se quitaron porque la idea es que todo funcione como viene en Mac.
 3. **`ls` → lsd y `cat` → bat con alias**: se quitaron porque rompen opciones de Mac. Probado: `ls -laT`, `ls -l@`, `ls -lO`, `cat -b`, `cat -e`, `cat -v` y `cat -t` fallaban. Se reemplazó por el color nativo de `ls` (`CLICOLOR`).
 4. **Tema cargado en todas las terminales**: se limitó a la Terminal de Mac porque en otras (VS Code, la app de Claude) no hay Nerd Font y los íconos se veían rotos.
@@ -158,7 +158,7 @@ Después de instalar, deberían cumplirse estas comprobaciones:
 
 ```bash
 # 1. Perfil predeterminado
-osascript -e 'tell application "Terminal" to name of default settings'        # → Savitar
+osascript -e 'tell application "Terminal" to name of default settings'        # → Farid
 
 # 2. El tema carga en la Terminal de Mac
 TERM_PROGRAM=Apple_Terminal zsh -lic 'echo ${+functions[p10k]}'              # → 1

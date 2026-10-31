@@ -7,11 +7,11 @@ var font = $.NSFont.fontWithNameSize('HackNFM-Regular', 14);
 if (!font || font.isNil()) throw "Falta la fuente Hack Nerd Font (brew install --cask font-hack-nerd-font)";
 var d = $.NSMutableDictionary.alloc.init;
 function set(k,v){ d.setObjectForKey(v, $(k)); }
-set('name', $('Savitar'));
+set('name', $('Farid'));
 set('type', $('Window Settings'));
 set('ProfileCurrentVersion', $(2.07));
 set('Font', arch(font));
-set('BackgroundColor', c('#0f111a', 0.78));
+set('BackgroundColor', c('#0f111a', 0.70));
 set('BackgroundBlur', $(0.6));
 set('BackgroundBlurInactive', $(0.6));
 set('TextColor', c('#e6edff'));
