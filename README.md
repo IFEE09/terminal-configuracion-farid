@@ -2,7 +2,7 @@
 
 Configuración de Farid para la **Terminal nativa de macOS**: prompt Powerlevel10k, fuente Hack Nerd Font, fondo transparente con desenfoque, colores vivos y neofetch. Además configura la Terminal para recuperar sus ventanas y agrega notificaciones de Claude Code (ver [Extras](#extras-terminal-y-claude-code)).
 
-**Regla principal para la Terminal: solo aspecto.** No agrega atajos de teclado, no reemplaza comandos (`ls` y `cat` siguen siendo los de Mac) y no cambia el comportamiento de ninguna tecla. Solo afecta a la Terminal de Mac: VS Code, la app de Claude y cualquier otra terminal quedan igual.
+**Regla principal para la Terminal:** no reemplaza comandos (`ls` y `cat` siguen siendo los de Mac). El tema solo afecta a la Terminal de Mac: VS Code, la app de Claude y cualquier otra terminal quedan igual. El `.zshrc` es el mismo que usa Farid a diario, así que también trae autocompletado con TAB, NVM y atajos de edición estilo Mac (ver [Cómo funciona el `.zshrc`](#cómo-funciona-el-zshrc)).
 
 Además instala las **notificaciones de Claude Code**: un aviso de macOS cada vez que Claude termina una tarea, con el resumen completo a un clic, y otros extras (ver [Extras](#extras-terminal-y-claude-code)).
 
@@ -14,7 +14,7 @@ Pégalo en un asistente de IA que pueda usar tu terminal, de preferencia Claude 
 Instala la configuración de terminal del repo público de GitHub IFEE09/terminal-configuracion-farid.
 
 1. Clónalo con `git clone https://github.com/IFEE09/terminal-configuracion-farid.git ~/terminal-configuracion-farid` (si ya existe, haz `git -C ~/terminal-configuracion-farid pull`).
-2. Lee el README.md completo para entender qué hace y qué NO debe hacer. En la Terminal: solo aspecto, sin atajos, sin reemplazar ls/cat, sin Kitty. Las notificaciones de Claude Code (hook Stop en ~/.claude/settings.json) sí van incluidas a propósito.
+2. Lee el README.md completo para entender qué hace y qué NO debe hacer. En la Terminal: sin reemplazar ls/cat, sin Kitty. Las notificaciones de Claude Code (hook Stop en ~/.claude/settings.json) sí van incluidas a propósito.
 3. Verifica que Homebrew esté instalado. Si no, detente y dime qué comando correr: pide contraseña y lo tengo que hacer yo.
 4. Ejecuta `~/terminal-configuracion-farid/install.sh`.
 5. Verifica lo que dice la sección "Verificación" del README y dime el resultado de cada punto (incluida la notificación de prueba).
@@ -107,6 +107,13 @@ Todo el tema está dentro de `if [[ "$TERM_PROGRAM" == "Apple_Terminal" && -o in
 - `CLICOLOR=1` y `LSCOLORS` activan el color del `ls` original de Mac. No es un alias, así que todas sus opciones funcionan igual.
 - Usa `$HOMEBREW_PREFIX`, por lo que funciona en Macs con Apple Silicon y con Intel.
 - Además agrega `~/.local/bin` al PATH, que es donde se instala Claude Code.
+
+Fuera de ese bloque (en cualquier terminal) también trae:
+
+- **Autocompletado con TAB**: menú navegable con flechas, sin distinguir mayúsculas.
+- **NVM** (Node): se carga si está instalado en `~/.nvm`.
+- **Atajos de edición estilo Mac** (widgets de zsh): `^Xa` seleccionar toda la línea, `^Xc` copiarla, `^Xd` borrarla, y selección por palabra o hasta inicio/fin (`^Xh`, `^Xl`, `^XH`, `^XL`, `^Xk`, `^Xx`, `^Xu`). Por sí solos no hacen nada visible: los dispara [Hammerspoon](https://www.hammerspoon.org) desde `~/.hammerspoon/init.lua` para que funcionen ⌘A, ⌥⇧←/→ y ⌘⇧←/→. Esa configuración de Hammerspoon no se incluye en este repo.
+- **Bolitas de color por pestaña** (solo en la Terminal de Mac, ver [Extras](#bolitas-de-color-por-pestaña)).
 
 ## Extras: Terminal y Claude Code
 

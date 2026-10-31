@@ -3,6 +3,15 @@ export PATH="$HOME/.local/bin:$PATH"
 # Claude Code: guardar siempre el historial de sesiones (para retomar con claude --continue)
 export CLAUDE_CODE_FORCE_SESSION_PERSISTENCE=1
 
+# Autocompletado con TAB (en cualquier terminal)
+fpath=("${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh/site-functions" $fpath)
+autoload -Uz compinit && compinit -i
+bindkey '^I' expand-or-complete
+zstyle ':completion:*' menu select                                   # menú navegable con TAB/flechas
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'  # sin importar mayúsculas
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+setopt AUTO_MENU COMPLETE_IN_WORD ALWAYS_TO_END
+
 # Tema visual: solo en la Terminal de Mac (las demás terminales quedan como vienen)
 if [[ "$TERM_PROGRAM" == "Apple_Terminal" && -o interactive ]]; then
   BREW="${HOMEBREW_PREFIX:-/opt/homebrew}"
@@ -24,26 +33,45 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" && -o interactive ]]; then
   source "$BREW/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"  # siempre al final
 fi
 
+# NVM (Node) — restaurado del .zshrc anterior
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Cmd+A en Terminal (vía Hammerspoon, ~/.hammerspoon/init.lua): seleccionar / copiar / borrar toda la línea
+_seleccionar_todo() { MARK=0; CURSOR=$#BUFFER; REGION_ACTIVE=1 }
+_copiar_todo() { print -rn -- "$BUFFER" | pbcopy; REGION_ACTIVE=0 }
+zle -N _seleccionar_todo
+zle -N _copiar_todo
+bindkey '^Xa' _seleccionar_todo
+bindkey '^Xc' _copiar_todo
+bindkey '^Xd' kill-buffer
+
 # Bolita de color por pestaña (solo Terminal de Mac): cada pestaña nueva toma el
 # siguiente color y lo antepone a su título, incluso al título que pone Claude Code
 # (vía ~/.local/bin/bolita-titulo.py). Para quitarlo, borrar este bloque.
 if [[ "$TERM_PROGRAM" == "Apple_Terminal" && -o interactive ]]; then
   if [[ -z "$TAB_BOLITA" ]]; then
     _bolitas=(🔴 🟠 🟡 🟢 🔵 🟣 🟤 ⚪ ⚫)
-    # Fondo levemente teñido del color de la bolita (RGB de 16 bits; el alfa lo pone el perfil)
-    _tintes=("8178,4363,6269" "8710,6629,4974" "8919,7994,6732" "5842,7393,6755" "5033,7277,10201" "6999,6583,9646" "7531,5727,6524" "8387,8642,10063" "5148,5519,7241")
     _f=~/.cache/bolita-pestana; mkdir -p ~/.cache
     _n=$(( ( $(cat $_f 2>/dev/null || echo 0) % ${#_bolitas} ) + 1 ))
     echo $_n > $_f
-    export TAB_BOLITA=${_bolitas[$_n]} TAB_TINTE=${_tintes[$_n]}
-    unset _bolitas _tintes _f _n
+    export TAB_BOLITA=${_bolitas[$_n]}
+    unset _bolitas _f _n
   fi
-  # Pinta el fondo de esta pestaña (la que tiene este tty), en segundo plano para no frenar el arranque
-  [[ -n "$TAB_TINTE" ]] && ( osascript -e "tell application \"Terminal\" to repeat with w in windows
-    repeat with t in tabs of w
-      if tty of t is \"$TTY\" then set background color of t to {$TAB_TINTE}
-    end repeat
-  end repeat" >/dev/null 2>&1 & ) 2>/dev/null
+  # Fondo teñido del color de la bolita: cambia esta pestaña (la de este tty) al perfil
+  # "Farid <bolita>" (más transparente). En segundo plano para no frenar el arranque.
+  ( osascript -e "tell application \"Terminal\"
+    if exists settings set \"Farid $TAB_BOLITA\" then
+      repeat with w in windows
+        try
+          repeat with t in tabs of w
+            if tty of t is \"$TTY\" then set current settings of t to settings set \"Farid $TAB_BOLITA\"
+          end repeat
+        end try
+      end repeat
+    end if
+  end tell" >/dev/null 2>&1 & ) 2>/dev/null
   _bolita_precmd() { print -Pn "\e]1;${TAB_BOLITA}\a" }
   autoload -Uz add-zsh-hook && add-zsh-hook precmd _bolita_precmd
   claude() {
@@ -54,3 +82,21 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" && -o interactive ]]; then
     fi
   }
 fi
+
+# Selección estilo Mac en Terminal (vía Hammerspoon, ~/.hammerspoon/init.lua):
+# ⌥⇧←/→ palabra, ⌘⇧←/→ hasta inicio/fin; se resalta y solo se borra con Delete.
+_sel_ini() { (( REGION_ACTIVE )) || { MARK=$CURSOR; REGION_ACTIVE=1 } }
+_sel_pal_izq() { _sel_ini; zle backward-word }
+_sel_pal_der() { _sel_ini; zle forward-word }
+_sel_inicio() { _sel_ini; CURSOR=0 }
+_sel_fin() { _sel_ini; CURSOR=$#BUFFER }
+_sel_borrar() { (( REGION_ACTIVE )) && zle kill-region; REGION_ACTIVE=0 }
+_sel_quitar() { REGION_ACTIVE=0 }
+for w in _sel_pal_izq _sel_pal_der _sel_inicio _sel_fin _sel_borrar _sel_quitar; do zle -N $w; done
+bindkey '^Xh' _sel_pal_izq
+bindkey '^Xl' _sel_pal_der
+bindkey '^XH' _sel_inicio
+bindkey '^XL' _sel_fin
+bindkey '^Xk' _sel_borrar
+bindkey '^Xx' _sel_quitar
+bindkey '^Xu' backward-kill-line

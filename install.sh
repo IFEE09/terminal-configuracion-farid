@@ -1,5 +1,5 @@
 #!/bin/bash
-# Instala la configuración "Farid" en la Terminal de Mac (solo aspecto, sin atajos)
+# Instala la configuración "Farid" en la Terminal de Mac
 # y las notificaciones de Claude Code.
 # Se puede ejecutar varias veces: respalda lo existente y no duplica nada.
 set -euo pipefail
@@ -61,6 +61,28 @@ osascript -e 'tell application "Terminal"
   set startup settings to settings set "Farid"
 end tell'
 ok "Perfil 'Farid' importado y marcado como predeterminado"
+
+# Variantes por pestaña: mismo perfil con el fondo teñido del color de su bolita y
+# 40 % más transparente (ver "Bolitas de color por pestaña" en el README)
+info "Creando perfiles de color por pestaña..."
+BOLITAS=(🔴 🟠 🟡 🟢 🔵 🟣 🟤 ⚪ ⚫)
+TINTES=("#28141f" "#2a2018" "#2c2721" "#1c2422" "#172433" "#222031" "#241c20" "#292b33" "#181a24")
+for i in "${!BOLITAS[@]}"; do
+  P="$(mktemp -d)/Farid ${BOLITAS[$i]}.terminal"
+  NAME="Farid ${BOLITAS[$i]}" BG="${TINTES[$i]}" ALPHA=0.42 OUT="$P" \
+    osascript -l JavaScript "$REPO/terminal/make-profile.js" >/dev/null
+  open "$P"
+done
+sleep 3
+# Cierra las ventanas que abrió la importación
+osascript -e 'tell application "Terminal"
+  repeat with w in (every window whose visible is true)
+    try
+      if name of current settings of selected tab of w starts with "Farid " then close w
+    end try
+  end repeat
+end tell' >/dev/null 2>&1 || true
+ok "Perfiles de color importados"
 
 # 5. Terminal: recuperar ventanas y pestañas al cerrar con Cmd+Q y volver a abrir
 defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows -bool true
