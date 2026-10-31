@@ -45,7 +45,9 @@ for f in zshrc p10k.zsh; do
   cp "$REPO/dotfiles/$f" "$dest"
 done
 zsh -n ~/.zshrc || fail "~/.zshrc tiene errores de sintaxis"
-ok "~/.zshrc y ~/.p10k.zsh instalados"
+mkdir -p ~/.local/bin
+cp "$REPO/terminal/bolita-titulo.py" ~/.local/bin/bolita-titulo.py
+ok "~/.zshrc, ~/.p10k.zsh y bolitas de pestaña instalados"
 
 # 4. Perfil de la Terminal
 info "Creando perfil 'Farid' de la Terminal..."

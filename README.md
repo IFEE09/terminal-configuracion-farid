@@ -54,6 +54,7 @@ install.sh                 Instalador (se puede correr varias veces)
 dotfiles/zshrc             → ~/.zshrc
 dotfiles/p10k.zsh          → ~/.p10k.zsh (estilo del prompt: lean, nerdfont, 24h)
 terminal/make-profile.js   Genera el perfil de la Terminal (JXA, sin dependencias)
+terminal/bolita-titulo.py  → ~/.local/bin/bolita-titulo.py (bolita en el título que pone Claude Code)
 claude/notify.sh           → ~/.claude/hooks/notify.sh (notificación al terminar)
 claude/clawd.png           → ~/.claude/hooks/clawd.png (monito de Claude Code en la notificación)
 claude/settings.json       Hooks, idioma y variables que se mezclan en ~/.claude/settings.json
@@ -112,6 +113,10 @@ Todo el tema está dentro de `if [[ "$TERM_PROGRAM" == "Apple_Terminal" && -o in
 ### Recuperar ventanas
 
 La Terminal reabre sus ventanas y pestañas, cada una en su carpeta, al cerrarla con **⌘Q** y volver a abrirla. Si se cierran las ventanas una por una con la X roja, no se recuperan. Claude no se reinicia solo: en cada pestaña usa `claude --continue` (última conversación de esa carpeta) o `claude --resume` (elegir de una lista).
+
+### Bolitas de color por pestaña
+
+Cada pestaña nueva de la Terminal de Mac toma el siguiente color (🔴 🟠 🟡 🟢 🔵 🟣 🟤 ⚪ ⚫), lo antepone a su título y tiñe muy levemente su fondo con ese color (9 %, conservando la transparencia del perfil). Así se distingue cada pestaña de un vistazo. La función `claude` del `.zshrc` corre Claude Code a través de `bolita-titulo.py` para que la bolita no se borre cuando Claude cambia el título. Para quitarlo, borra el bloque "Bolita de color por pestaña" de `~/.zshrc`.
 
 ### Historial de sesiones
 
