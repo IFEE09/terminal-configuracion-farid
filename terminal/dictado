@@ -1,0 +1,22 @@
+#!/bin/zsh
+# dictado [segundos]: inicia el dictado de macOS en la app que esté al frente.
+# Con segundos, espera ese tiempo para que cambies a otra app (ej. dictado 3).
+[[ -n "$1" ]] && { echo "Cambia a la app donde quieres dictar… ($1 s)"; sleep "$1"; }
+osascript <<'OSA'
+tell application "System Events"
+  set p to first process whose frontmost is true
+  tell p
+    repeat with m in menu bar items of menu bar 1
+      try
+        repeat with i in menu items of menu 1 of m
+          if name of i is in {"Iniciar dictado", "Iniciar dictado…", "Start Dictation", "Start Dictation…"} then
+            click i
+            return "Dictado iniciado en " & (name of p)
+          end if
+        end repeat
+      end try
+    end repeat
+  end tell
+  return "Esta app no tiene la opción \"Iniciar dictado\"."
+end tell
+OSA

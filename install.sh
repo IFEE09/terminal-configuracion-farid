@@ -87,6 +87,20 @@ osascript -e 'tell application "Terminal"
 end tell' >/dev/null 2>&1 || true
 ok "Perfiles de color importados"
 
+# Hammerspoon: atajos estilo Mac en la Terminal (⌘A, selección con ⌥⇧/⌘⇧ y flechas, ⌘←/→, ⌘⌫)
+# y dictado con ⌘D+J (ver "Atajos de teclado" en el README)
+info "Instalando Hammerspoon y sus atajos..."
+brew install --cask hammerspoon
+mkdir -p ~/.hammerspoon
+if [[ -f ~/.hammerspoon/init.lua ]] && ! cmp -s ~/.hammerspoon/init.lua "$REPO/hammerspoon/init.lua"; then
+  cp ~/.hammerspoon/init.lua ~/.hammerspoon/init.lua.backup-$STAMP
+  ok "Respaldo: ~/.hammerspoon/init.lua.backup-$STAMP"
+fi
+cp "$REPO/hammerspoon/init.lua" ~/.hammerspoon/init.lua
+install -m 755 "$REPO/terminal/dictado" ~/.local/bin/dictado
+open -a Hammerspoon
+ok "Hammerspoon instalado. Paso manual: Ajustes → Privacidad y seguridad → Accesibilidad → activar Hammerspoon"
+
 # 5. Terminal: recuperar ventanas y pestañas al cerrar con Cmd+Q y volver a abrir
 defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows -bool true
 ok "La Terminal recuperará sus ventanas al reabrirse"

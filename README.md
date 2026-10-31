@@ -46,6 +46,7 @@ git clone https://github.com/IFEE09/claude-usage.git ~/claude-usage
 | neofetch | Logo de Apple y datos de la Mac al escribir `neofetch` | Descarga de la versión 7.1.0 a `~/.local/bin` (Homebrew ya no lo tiene) |
 | terminal-notifier + jq | Notificaciones de Claude Code al terminar | `brew install terminal-notifier jq` |
 | Hook de Claude Code | Aviso al terminar una tarea | `claude/notify.sh` + `claude/settings.json` |
+| Hammerspoon | Atajos estilo Mac en la Terminal (⌘A, selección con flechas) y dictado con ⌘D+J | `brew install --cask hammerspoon` + `hammerspoon/init.lua` |
 
 ## Archivos
 
@@ -59,6 +60,8 @@ claude/notify.sh           → ~/.claude/hooks/notify.sh (notificación al termi
 claude/clawd.png           → ~/.claude/hooks/clawd.png (monito de Claude Code en la notificación)
 claude/settings.json       Hooks, idioma y variables que se mezclan en ~/.claude/settings.json
 claude/CLAUDE.md           Preferencias globales de Claude (español, breve) → ~/.claude/CLAUDE.md
+hammerspoon/init.lua       → ~/.hammerspoon/init.lua (atajos de teclado estilo Mac y dictado)
+terminal/dictado           → ~/.local/bin/dictado (inicia el dictado de macOS en la app al frente)
 ```
 
 ## Qué hace `install.sh`, paso a paso
@@ -68,9 +71,10 @@ claude/CLAUDE.md           Preferencias globales de Claude (español, breve) →
 3. Instala la fuente, Powerlevel10k y los dos plugins.
 4. Respalda `~/.zshrc` y `~/.p10k.zsh` si existen y son distintos (`.backup-FECHA`), y copia los del repo.
 5. Genera `Farid.terminal` con `make-profile.js`, lo importa (se abre una ventana de la Terminal) y lo deja como perfil predeterminado y de inicio.
-6. Activa que la Terminal recupere sus ventanas al reabrirse.
-7. Descarga neofetch 7.1.0 desde su repo en GitHub, comprueba su huella SHA-256 y lo deja en `~/.local/bin`. Homebrew lo retiró porque el proyecto ya no se mantiene; esa versión es la última y funciona en macOS.
-8. Instala `terminal-notifier` y `jq`, copia `notify.sh` y mezcla `claude/settings.json` en `~/.claude/settings.json` (con respaldo `.backup-FECHA`; conserva tus otros ajustes y hooks, reemplaza hooks anteriores de `notify.sh` y no duplica nada si se corre otra vez). Al final pide permiso de notificaciones.
+6. Instala Hammerspoon, respalda `~/.hammerspoon/init.lua` si existe y es distinto, copia el del repo y el script `dictado`, y abre Hammerspoon. Falta darle permiso de Accesibilidad a mano.
+7. Activa que la Terminal recupere sus ventanas al reabrirse.
+8. Descarga neofetch 7.1.0 desde su repo en GitHub, comprueba su huella SHA-256 y lo deja en `~/.local/bin`. Homebrew lo retiró porque el proyecto ya no se mantiene; esa versión es la última y funciona en macOS.
+9. Instala `terminal-notifier` y `jq`, copia `notify.sh` y mezcla `claude/settings.json` en `~/.claude/settings.json` (con respaldo `.backup-FECHA`; conserva tus otros ajustes y hooks, reemplaza hooks anteriores de `notify.sh` y no duplica nada si se corre otra vez). Al final pide permiso de notificaciones.
 
 ## Detalles del perfil de la Terminal
 
@@ -112,7 +116,7 @@ Fuera de ese bloque (en cualquier terminal) también trae:
 
 - **Autocompletado con TAB**: menú navegable con flechas, sin distinguir mayúsculas.
 - **NVM** (Node): se carga si está instalado en `~/.nvm`.
-- **Atajos de edición estilo Mac** (widgets de zsh): `^Xa` seleccionar toda la línea, `^Xc` copiarla, `^Xd` borrarla, y selección por palabra o hasta inicio/fin (`^Xh`, `^Xl`, `^XH`, `^XL`, `^Xk`, `^Xx`, `^Xu`). Por sí solos no hacen nada visible: los dispara [Hammerspoon](https://www.hammerspoon.org) desde `~/.hammerspoon/init.lua` para que funcionen ⌘A, ⌥⇧←/→ y ⌘⇧←/→. Esa configuración de Hammerspoon no se incluye en este repo.
+- **Atajos de edición estilo Mac** (widgets de zsh): `^Xa` seleccionar toda la línea, `^Xc` copiarla, `^Xd` borrarla, y selección por palabra o hasta inicio/fin (`^Xh`, `^Xl`, `^XH`, `^XL`, `^Xk`, `^Xx`, `^Xu`). Por sí solos no hacen nada visible: los dispara [Hammerspoon](https://www.hammerspoon.org) desde `~/.hammerspoon/init.lua` para que funcionen ⌘A, ⌥⇧←/→ y ⌘⇧←/→. Ver [Atajos de teclado](#atajos-de-teclado).
 - **Bolitas de color por pestaña** (solo en la Terminal de Mac, ver [Extras](#bolitas-de-color-por-pestaña)).
 
 ## Extras: Terminal y Claude Code
@@ -120,6 +124,27 @@ Fuera de ese bloque (en cualquier terminal) también trae:
 ### Recuperar ventanas
 
 La Terminal reabre sus ventanas y pestañas, cada una en su carpeta, al cerrarla con **⌘Q** y volver a abrirla. Si se cierran las ventanas una por una con la X roja, no se recuperan. Claude no se reinicia solo: en cada pestaña usa `claude --continue` (última conversación de esa carpeta) o `claude --resume` (elegir de una lista).
+
+### Atajos de teclado
+
+[Hammerspoon](https://www.hammerspoon.org) (`hammerspoon/init.lua`) hace que la Terminal se comporte como un campo de texto de navegador. Solo actúa en la Terminal de Mac, cuando la pestaña está en zsh o en Claude Code; en cualquier otro caso cada tecla funciona normal.
+
+| Atajo | Qué hace |
+|---|---|
+| ⌘A | Selecciona solo lo que escribiste (no toda la ventana) |
+| ⌥⇧← / ⌥⇧→ | Selecciona palabra por palabra (se acumula) |
+| ⌘⇧← / ⌘⇧→ | Selecciona hasta el inicio / fin de la línea |
+| Con selección: Delete | Borra lo seleccionado |
+| Con selección: escribir | Reemplaza lo seleccionado por lo que escribes |
+| Con selección: ⌘C / ⌘X / ⌘V | Copia (la selección se mantiene) / corta / reemplaza con lo pegado |
+| Con selección: flechas, Esc u otra tecla | Quita la selección |
+| ⌘← / ⌘→ | Inicio / fin de la línea |
+| ⌘⌫ | Borra hasta el inicio de la línea |
+| ⌘D+J (cualquier app) | Inicia el dictado de macOS (`~/.local/bin/dictado`) |
+
+En zsh la selección se ve resaltada (widgets `_sel_*` y `_seleccionar_todo` del `.zshrc`). Claude Code no permite resaltar texto en su caja de entrada, así que ahí la selección es simulada: aparece un aviso ("Todo seleccionado", "Seleccionado ← 2 palabra(s)…") y Delete, escribir o ⌘V actúan sobre esa parte; ⌘C no puede copiar la entrada de Claude Code.
+
+Requiere dar permiso a Hammerspoon en **Ajustes → Privacidad y seguridad → Accesibilidad**.
 
 ### Bolitas de color por pestaña
 
@@ -201,6 +226,9 @@ echo '{"cwd":"/tmp/prueba","last_assistant_message":"Prueba"}' | ~/.claude/hooks
 
 # 11. neofetch instalado
 zsh -ic 'neofetch --version'                                                 # → Neofetch 7.1.0
+
+# 12. Hammerspoon abierto (y con permiso de Accesibilidad en Ajustes)
+pgrep -x Hammerspoon >/dev/null && echo ok                                     # → ok
 ```
 
 ## Desinstalar
@@ -219,5 +247,6 @@ jq 'del(.hooks.Stop[] | select(any(.hooks[]; .command | contains("notify.sh"))))
 rm -f ~/.claude/hooks/notify.sh ~/.claude/hooks/clawd.png
 rm -rf ~/.claude/notificaciones
 brew uninstall terminal-notifier
+brew uninstall --cask hammerspoon && rm -rf ~/.hammerspoon ~/.local/bin/dictado
 # Quitar las preferencias de ~/.claude/CLAUDE.md y "language" de ~/.claude/settings.json si ya no las quieres
 ```

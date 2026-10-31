@@ -40,7 +40,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # Cmd+A en Terminal (vía Hammerspoon, ~/.hammerspoon/init.lua): seleccionar / copiar / borrar toda la línea
 _seleccionar_todo() { MARK=0; CURSOR=$#BUFFER; REGION_ACTIVE=1 }
-_copiar_todo() { print -rn -- "$BUFFER" | pbcopy; REGION_ACTIVE=0 }
+_copiar_todo() { print -rn -- "$BUFFER" | pbcopy }
 zle -N _seleccionar_todo
 zle -N _copiar_todo
 bindkey '^Xa' _seleccionar_todo
