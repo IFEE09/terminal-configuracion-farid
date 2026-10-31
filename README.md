@@ -123,7 +123,7 @@ La Terminal reabre sus ventanas y pestañas, cada una en su carpeta, al cerrarla
 
 ### Bolitas de color por pestaña
 
-Cada pestaña nueva de la Terminal de Mac toma el siguiente color (🔴 🟠 🟡 🟢 🔵 🟣 🟤 ⚪ ⚫), lo antepone a su título y tiñe muy levemente su fondo con ese color (9 %, conservando la transparencia del perfil). Así se distingue cada pestaña de un vistazo. La función `claude` del `.zshrc` corre Claude Code a través de `bolita-titulo.py` para que la bolita no se borre cuando Claude cambia el título. Para quitarlo, borra el bloque "Bolita de color por pestaña" de `~/.zshrc`.
+Cada pestaña nueva de la Terminal de Mac toma el siguiente color (🔴 🟠 🟡 🟢 🔵 🟣 🟤 ⚪ ⚫), lo antepone a su título y tiñe levemente su fondo con ese color (12 %, con 15 % de transparencia) cambiando la pestaña al perfil "Farid <bolita>". Así se distingue cada pestaña de un vistazo. La función `claude` del `.zshrc` corre Claude Code a través de `bolita-titulo.py` para que la bolita no se borre cuando Claude cambia el título. Para quitarlo, borra el bloque "Bolita de color por pestaña" de `~/.zshrc`.
 
 ### Historial de sesiones
 

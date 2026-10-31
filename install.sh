@@ -63,13 +63,16 @@ end tell'
 ok "Perfil 'Farid' importado y marcado como predeterminado"
 
 # Variantes por pestaña: mismo perfil con el fondo teñido del color de su bolita y
-# 40 % más transparente (ver "Bolitas de color por pestaña" en el README)
+# 15 % de transparencia (ver "Bolitas de color por pestaña" en el README)
 info "Creando perfiles de color por pestaña..."
 BOLITAS=(🔴 🟠 🟡 🟢 🔵 🟣 🟤 ⚪ ⚫)
 TINTES=("#28141f" "#2a2018" "#2c2721" "#1c2422" "#172433" "#222031" "#241c20" "#292b33" "#181a24")
+for b in "${BOLITAS[@]}"; do   # borra las versiones anteriores para no duplicarlas
+  osascript -e "tell application \"Terminal\" to if exists settings set \"Farid $b\" then delete settings set \"Farid $b\"" >/dev/null 2>&1 || true
+done
 for i in "${!BOLITAS[@]}"; do
   P="$(mktemp -d)/Farid ${BOLITAS[$i]}.terminal"
-  NAME="Farid ${BOLITAS[$i]}" BG="${TINTES[$i]}" ALPHA=0.42 OUT="$P" \
+  NAME="Farid ${BOLITAS[$i]}" BG="${TINTES[$i]}" ALPHA=0.85 OUT="$P" \
     osascript -l JavaScript "$REPO/terminal/make-profile.js" >/dev/null
   open "$P"
 done
